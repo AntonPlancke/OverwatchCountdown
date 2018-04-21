@@ -1,0 +1,52 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #00CFC5;
+    width: 100%;
+    overflow: hidden;
+}
+/* ====== Page CSS ====== */
+header {
+    background-color: #24292C;
+    color: white;
+    box-shadow: 0 10px 10px 0 rgba(0,0,0,0.25);
+    height: 10vh;
+}
+
+header h1 {
+    line-height: 10vh;
+    font-size: 2rem;
+}
+
+footer {
+    background-color: #24292C;
+    height: 5vh;
+}
+
+footer h2 {
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    line-height: 5vh;
+}
+
+main {
+    overflow-y: auto;
+    height: 85vh;
+}
+
+/* ==== Countdown CSS ==== */
+
+.container .countdown:nth-child(odd) {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.container .countdown {
+    padding: 25px;
+}
+
+.container .countdown .title {
+    margin-bottom: 5px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
