@@ -20,7 +20,17 @@ function createCountdownElements() {
 
     for (let i = 0; i < countdowns.Countdowns.length; i++) {
         let countdown = countdowns.Countdowns[i];
-        container.innerHTML += `<li class="countdown" data-type="${countdown.type}" data-start="${countdown.start}" data-end="${countdown.end}"><h1 class="title">${countdown.name}</h1><p class="timer"></p></li>`;
+        if (!countdown.finished)
+        {
+            let background = (countdown.background !== null) ? countdown.background : randomBackground();
+
+            container.innerHTML += `<li class="countdown" data-type="${countdown.type}" data-start="${countdown.start}" data-end="${countdown.end}">
+                                         <div class="progression"><span class="progpercentage"></span></div>
+                                         <h1 class="title">${countdown.name}</h1>
+                                         <p class="timer"></p>
+                                         <div class="background" style="background-image: url('${background}')"></div>
+                                    </li>`;
+        }
     }
 }
 
@@ -46,16 +56,18 @@ function isOverdue(element) {
     return (countdownDate - now < 0)
 }
 
+
 function updateTimer(element, active, overdue) {
     let countdownDate;
+    let timer = element.getElementsByClassName("timer")[0];
     if (active) {
         countdownDate = addDateOffset(new Date(element.dataset.end));
-        element.lastElementChild.innerHTML = "ends in ";
-        if (overdue) element.lastElementChild.innerHTML = "is overdue by ";
+        timer.innerHTML = "ends in ";
+        if (overdue) timer.innerHTML = "is overdue by ";
     }
     else {
         countdownDate = addDateOffset(new Date(element.dataset.start));
-        element.lastElementChild.innerHTML = "starts in ";
+        timer.innerHTML = "starts in ";
     }
     let now = new Date().getTime();
     let distance = countdownDate - now;
@@ -66,9 +78,37 @@ function updateTimer(element, active, overdue) {
     let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     let seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-    element.lastElementChild.innerHTML += days + " days, " + hours + " hours, " + minutes + " min, " + seconds + " sec";
+    timer.innerHTML += days + " days, " + hours + " hours, " + minutes + " min, " + seconds + " sec";
+
+    updateProgression(element);
+}
+
+function updateProgression(element) {
+    let progpercentage = element.getElementsByClassName("progpercentage")[0];
+    let progression = progpercentage.parentNode;
+
+    if (isActive(element)) {
+        let now = new Date().getTime();
+        let start = addDateOffset(new Date(element.dataset.start));
+        let end = addDateOffset(new Date(element.dataset.end));
+
+        let total = end - start;
+        let current = end - now;
+        let percentage = Math.floor(((total - current) / total) * 100);
+
+        progpercentage.style.width = percentage + "%";
+    } else {
+        progression.style.display = "none";
+    }
 }
 
 function addDateOffset(uctDate) {
     return new Date(uctDate.toString());
+}
+
+function randomBackground() {
+    let location = "assets/images/";
+    let backgrounds = ["all-heroes.jpg", "blizzardworld.jpg", "eichenwalde.jpg", "eichenwalde.png", "hanumura.jpg", "heroes.jpg", "numbani.jpg", "numbani-airport.jpg", "oasis.jpg", "rialto.jpg"];
+    let randomBackground = backgrounds[Math.floor((Math.random() * (backgrounds.length - 1)))];
+    return location +  randomBackground;
 }
