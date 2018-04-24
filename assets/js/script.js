@@ -97,8 +97,7 @@ function updateProgression(element) {
         let percentage = Math.floor(((total - current) / total) * 100);
 
         progpercentage.style.width = percentage + "%";
-    } else {
-        progression.style.display = "none";
+        progression.style.display = "block";
     }
 }
 
